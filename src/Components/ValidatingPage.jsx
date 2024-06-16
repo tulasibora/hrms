@@ -19,9 +19,9 @@ function ValidatingPage() {
   }, []);
   return (
     <div>
-      <div className="p-2 d-flex justify-content-center align-items-center vh-100 formDiv">
-        <div className="p-3 rounded w-25 border loginForm">
-          <h3 className="bt-3">Login Form</h3>
+      <div className="formDiv">
+        <div className="loginForm">
+          <h3 className="loginFormHeadding">LOGIN FORM</h3>
           <div className="my-3 loginValidationForm">
             <button
               className="btn btn-primary "

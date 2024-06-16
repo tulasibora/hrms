@@ -6,9 +6,6 @@
   background-repeat: no-repeat;
   background-size: 100% 120%;
 }
-.loginForm {
-  color: beige;
-}
 .loginForm h3 {
   text-align: center;
 }
@@ -72,12 +69,41 @@
   font-size: 1.8rem;
 }
 /* //////////////// */
+.formDiv {
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.loginForm {
+  color: beige;
+  border: 1px solid gray;
+  width: 25rem;
+  padding: 3;
+  height: 40vh;
+  border-radius: 1rem;
+}
 .formDivForSearch {
   display: flex;
   width: 75%;
   justify-content: space-around;
   text-align: center;
   padding: 0.5rem;
+}
+.loginFormHeadding {
+  padding: 1rem;
+  padding-bottom: 2.5rem;
+}
+.FormHeadding {
+  padding: 1rem;
+}
+.loginValidationForm {
+  display: flex;
+  justify-content: space-between;
+  padding: 2rem;
+}
+.emailNpasswordDiv {
+  padding: 1rem 3rem;
 }
 .addButton {
   color: white;
@@ -108,8 +134,4 @@
 
 .SubmitNCancel {
   background-color: white !important;
-}
-.loginValidationForm {
-  display: flex;
-  justify-content: space-between;
 }
