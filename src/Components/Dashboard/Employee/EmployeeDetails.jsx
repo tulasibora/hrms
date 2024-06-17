@@ -16,7 +16,6 @@ function EmployeeDetails() {
       .catch((err) => console.log(err));
   }, []);
 
-  console.log(employee);
   const handleLogout = () => {
     axios
       .get("http://localhost:8182/auth/logout")

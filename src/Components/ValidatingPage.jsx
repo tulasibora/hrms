@@ -20,8 +20,9 @@ function ValidatingPage() {
   return (
     <div>
       <div className="formDiv">
+        <h3 className="loginFormHeadding">EMPLOYEE MANAGEMENT SYSTEM</h3>
         <div className="loginForm">
-          <h3 className="loginFormHeadding">LOGIN FORM</h3>
+          <h5 className="loginFormHeadding1">Login As </h5>
           <div className="my-3 loginValidationForm">
             <button
               className="btn btn-primary "

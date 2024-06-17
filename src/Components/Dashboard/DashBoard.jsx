@@ -5,7 +5,6 @@ import "../Component.css";
 function DashBoard() {
   axios.defaults.withCredentials = true;
   const pathname = window.location.pathname;
-  console.log(pathname);
   const navigate = useNavigate();
   const handleLogOut = () => {
     axios
