@@ -25,7 +25,6 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
     fontSize: 18,
   },
 }));
-
 const StyledTableRow = styled(TableRow)(({ theme }) => ({
   "&:nth-of-type(odd)": {
     backgroundColor: theme.palette.action.hover,
@@ -127,7 +126,7 @@ function EmployeeData() {
   }, [values.name || values.email || values.job_title]);
 
   return (
-    <div>
+    <div className="employeeData">
       <div className="divHedding">
         <div className="formDivForSearch">
           <div>
@@ -136,7 +135,7 @@ function EmployeeData() {
               name="name"
               placeholder="Search By Name"
               onChange={(e) => setValues({ ...values, name: e.target.value })}
-              style={{ width: "20rem" }}
+              style={{ width: "19rem", border: "1px solid black" }}
               className="form-control rounded-1 inputFormSearch"
             />
           </div>
@@ -145,7 +144,7 @@ function EmployeeData() {
               type="text"
               name="email"
               placeholder="Search By Email"
-              style={{ width: "20rem" }}
+              style={{ width: "19rem", border: "1px solid black" }}
               onChange={(e) => setValues({ ...values, email: e.target.value })}
               className="form-control rounded-1 inputFormSearch"
             />
@@ -155,38 +154,40 @@ function EmployeeData() {
               type="text"
               name="job_title"
               placeholder="Search By JobTitle"
-              style={{ width: "20rem" }}
+              style={{ width: "19rem", border: "1px solid black" }}
               onChange={(e) =>
                 setValues({ ...values, job_title: e.target.value })
               }
               className="form-control rounded-1 inputFormSearch"
             />
           </div>
+          <div>
+            <button
+              variant="contained"
+              className="addButton"
+              onClick={() => handleAddEmpolyee()}
+            >
+              ADD
+            </button>
+          </div>
         </div>
-        <button
-          variant="contained"
-          className="addButton"
-          onClick={() => handleAddEmpolyee()}
-        >
-          ADD
-        </button>
       </div>
       <div>
         <TableContainer className="tableContainer">
           <Table className="table tableContentDiv">
             <TableHead>
-              <TableRow>
-                <TableCell>ID</TableCell>
-                <TableCell>Name</TableCell>
-                <TableCell>Email</TableCell>
-                <TableCell>Contact Number</TableCell>
-                <TableCell>Department Id</TableCell>
-                <TableCell>Job Title</TableCell>
-                <TableCell>Date OF Joining</TableCell>
-                <TableCell>Date Of Birth</TableCell>
-                <TableCell>Delete</TableCell>
-                <TableCell>Edit</TableCell>
-              </TableRow>
+              <StyledTableRow>
+                <StyledTableCell>ID</StyledTableCell>
+                <StyledTableCell>Name</StyledTableCell>
+                <StyledTableCell>Email</StyledTableCell>
+                <StyledTableCell>Contact Number</StyledTableCell>
+                <StyledTableCell>Department Id</StyledTableCell>
+                <StyledTableCell>Job Title</StyledTableCell>
+                <StyledTableCell>Date OF Joining</StyledTableCell>
+                <StyledTableCell>Date Of Birth</StyledTableCell>
+                <StyledTableCell>Delete</StyledTableCell>
+                <StyledTableCell>Edit</StyledTableCell>
+              </StyledTableRow>
             </TableHead>
             <TableBody>
               {employee.map((emp) => {

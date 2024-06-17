@@ -1,3 +1,9 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
+* {
+  font-family: "Poppins", sans-serif;
+  font-weight: 500;
+  font-style: normal;
+}
 .formDiv {
   background: url("../assets/simplehrms.jpg");
   background: linear-gradient(rgba(11, 11, 11, 0.5), rgba(10, 10, 10, 0.5)),
@@ -6,18 +12,51 @@
   background-repeat: no-repeat;
   background-size: 100% 120%;
 }
+.employeeformDiv {
+  text-align: center;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: white;
+}
+.employeeDetails img {
+  width: 25vh;
+  height: 25vh;
+}
+.employeeDetails {
+  background-color: black;
+  width: auto;
+  padding: 2rem;
+  border-radius: 1.2rem;
+}
+
 .loginForm h3 {
   text-align: center;
 }
 
 /* //////////////////////////////// */
-.addDepart {
+.DepartmentAddDiv {
+  text-align: center;
+  background-color: black;
+  margin-top: 2rem;
+  height: 60vh;
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 80vh;
-  border: 1px solid gray;
+  width: 30vw;
+  margin-left: auto;
+  margin-right: auto;
+  border-radius: 1rem;
 }
+.addDepart {
+  display: flex;
+  height: 50vh;
+  align-items: center;
+  justify-content: center;
+}
+
 .selectInput {
   width: 100%;
   height: 2rem;
@@ -30,7 +69,7 @@
   padding: 2.3rem;
   border: 1px solid gray;
   border-radius: 2rem;
-  background-color: cadetblue;
+  background-color: black;
 }
 .addEmployeeMainDiv {
   padding: 1rem;
@@ -42,15 +81,35 @@
   display: flex;
   justify-content: space-between;
 }
+.ButtonsDiv button {
+  width: 5rem !important;
+  background-color: white !important;
+  color: black !important;
+}
 .inputForm {
   border-radius: 1rem !important;
 }
 /* ////////// */
+.dashboardHeadding {
+  color: white;
+}
 .tableContainer {
   margin-top: 0.5rem;
   padding: 1rem;
 }
-
+.tableContentDiv {
+  /* border: 1px solid gray !important; */
+  width: 100% !important;
+  margin-left: auto;
+  margin-right: auto;
+}
+.employeeData {
+  width: 95%;
+  display: flex;
+  margin-left: auto;
+  margin-right: auto;
+  flex-direction: column;
+}
 /* ///////////////// */
 .listNavbar {
   display: flex;
@@ -62,7 +121,7 @@
   text-align: center;
   align-items: center;
   padding-right: 2rem;
-  background-color: rgb(21, 114, 114);
+  background-color: black;
 }
 .navBarDiv h4 {
   margin-left: 28rem;
@@ -84,11 +143,26 @@
   border-radius: 1rem;
 }
 .formDivForSearch {
+  margin-top: 0.5rem;
   display: flex;
+  gap: 3rem;
   width: 75%;
   justify-content: space-around;
   text-align: center;
-  padding: 0.5rem;
+  padding: 0.2rem 0rem;
+  padding-top: 1rem;
+}
+.formDivForSearchDept {
+  margin-top: 0.5rem;
+  display: flex;
+  gap: 15rem;
+  width: 75%;
+  justify-content: space-around;
+  text-align: center;
+  padding: 0.2rem 0rem;
+  padding-top: 1rem;
+  margin-left: auto;
+  margin-right: auto;
 }
 .loginFormHeadding {
   padding: 1rem;
@@ -112,7 +186,7 @@
   height: 6vh;
   border: none;
   border-radius: 0.5rem;
-  background-color: rgb(22, 97, 97);
+  background-color: black;
 }
 .divHedding {
   padding: 0rem 2rem;
@@ -134,4 +208,26 @@
 
 .SubmitNCancel {
   background-color: white !important;
+  color: black !important;
+  width: 9rem !important;
+}
+
+.empDetails {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+.empDetails h5 {
+  padding: 0.5rem;
+  border-radius: 0.3rem;
+}
+.empDetails h5 span {
+  color: deepskyblue;
+}
+.employeeLogout {
+  height: 2.8rem !important;
+  background-color: white !important;
+  color: black !important;
+  width: 15rem !important;
 }

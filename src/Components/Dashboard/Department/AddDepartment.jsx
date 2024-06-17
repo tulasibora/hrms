@@ -25,30 +25,30 @@ const AddDepartMent = () => {
     setValues({ name: "" });
   };
   return (
-    <div className="addDepart mb-2">
-      <form onSubmit={(e) => handleSubmit(e)}>
-        <h5 className="mb-5">Add New Department</h5>
-        <div className="mb-3">
-          <input
-            type="text"
-            name="name"
-            placeholder="Enter New Department"
-            onChange={(e) => setValues({ ...values, name: e.target.value })}
-            className="form-control rounded-0 inputForm"
-          />
-        </div>
-        <div>
-          <button className="mb-3 btn btn-primary w-50 rounded-0">
-            Submit
-          </button>
-          <button
-            className="mb-3 btn btn-primary w-50 rounded-0"
-            onClick={() => handleCancel()}
-          >
-            Cacel
-          </button>
-        </div>
-      </form>
+    <div className="DepartmentAddDiv">
+      <div className="addDepart mb-2">
+        <form onSubmit={(e) => handleSubmit(e)}>
+          <h5 className="mb-5 text-white">ADD NEW DEPARTMENT</h5>
+          <div className="mb-4">
+            <input
+              type="text"
+              name="name"
+              placeholder="Enter New Department"
+              onChange={(e) => setValues({ ...values, name: e.target.value })}
+              className="form-control rounded-2 inputForm"
+            />
+          </div>
+          <div className="ButtonsDiv">
+            <button className="mb-3 btn rounded-1">Submit</button>
+            <button
+              className="mb-3 btn rounded-1"
+              onClick={() => handleCancel()}
+            >
+              Cancel
+            </button>
+          </div>
+        </form>
+      </div>
     </div>
   );
 };

@@ -3,13 +3,32 @@ import React, { useEffect, useState } from "react";
 import "../../Component.css";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
-import TableCell from "@mui/material/TableCell";
+import TableCell, { tableCellClasses } from "@mui/material/TableCell";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
-import { Button, TableContainer, TablePagination } from "@mui/material";
+import { TableContainer, TablePagination, styled } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+
+const StyledTableCell = styled(TableCell)(({ theme }) => ({
+  [`&.${tableCellClasses.head}`]: {
+    backgroundColor: theme.palette.common.black,
+    color: theme.palette.common.white,
+  },
+  [`&.${tableCellClasses.body}`]: {
+    fontSize: 18,
+  },
+}));
+const StyledTableRow = styled(TableRow)(({ theme }) => ({
+  "&:nth-of-type(odd)": {
+    backgroundColor: theme.palette.action.hover,
+  },
+  // hide last border
+  "&:last-child td, &:last-child th": {
+    border: 0,
+  },
+}));
 function Department() {
   const navigate = useNavigate();
   const [department, setDeparments] = useState([]);
@@ -81,7 +100,7 @@ function Department() {
   return (
     <div>
       <div className="divHedding">
-        <div className="formDivForSearch">
+        <div className="formDivForSearchDept">
           <div>
             <input
               type="text"
@@ -90,48 +109,50 @@ function Department() {
               onChange={(e) =>
                 setValues({ ...values, dept_name: e.target.value })
               }
-              style={{ width: "47rem" }}
+              style={{ width: "34rem", border: "1px solid grey" }}
               className="form-control rounded-1"
             />
           </div>
+          <div>
+            <button
+              variant="contained"
+              className="addButton"
+              onClick={() => handleAdd()}
+            >
+              ADD
+            </button>
+          </div>
         </div>
-        <button
-          variant="contained"
-          className="addButton"
-          onClick={() => handleAdd()}
-        >
-          ADD
-        </button>
       </div>
       <div className="TableOuterDiv">
         <TableContainer className="tableContainerDept">
           <Table className="table tableContentDiv">
             <TableHead>
-              <TableRow>
-                <TableCell>ID</TableCell>
-                <TableCell>Department</TableCell>
-                <TableCell>Edit</TableCell>
-                <TableCell>Delete</TableCell>
-              </TableRow>
+              <StyledTableRow>
+                <StyledTableCell>ID</StyledTableCell>
+                <StyledTableCell>Department</StyledTableCell>
+                <StyledTableCell>Edit</StyledTableCell>
+                <StyledTableCell>Delete</StyledTableCell>
+              </StyledTableRow>
             </TableHead>
             <TableBody>
               {department.map((dept) => {
                 return (
-                  <TableRow
+                  <StyledTableRow
                     key={dept.id}
                     sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                   >
-                    <TableCell>{dept.id}</TableCell>
-                    <TableCell>{dept.dept_name}</TableCell>
-                    <TableCell>
+                    <StyledTableCell>{dept.id}</StyledTableCell>
+                    <StyledTableCell>{dept.dept_name}</StyledTableCell>
+                    <StyledTableCell>
                       <EditIcon onClick={() => handleEditDepartment(dept.id)} />
-                    </TableCell>
-                    <TableCell>
+                    </StyledTableCell>
+                    <StyledTableCell>
                       <DeleteIcon
                         onClick={() => handleDeleteDepartment(dept.id)}
                       />
-                    </TableCell>
-                  </TableRow>
+                    </StyledTableCell>
+                  </StyledTableRow>
                 );
               })}
             </TableBody>

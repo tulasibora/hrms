@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 const defaultValue = {
   password: "",
   name: "",
-  dept_id: 1,
+  dept_id: undefined,
   email: "",
   job_title: "",
   contact: "",
@@ -17,6 +17,7 @@ function AddEmployee() {
   const navigate = useNavigate();
   const [values, setValues] = useState(defaultValue);
   const [department, setDeparment] = useState([]);
+  const [error, setError] = useState("");
 
   // get Departmets in DataBase
 
@@ -30,14 +31,19 @@ function AddEmployee() {
   //To Submit The Employee data
   const handleSubmit = (event) => {
     event.preventDefault();
-    axios
-      .post("http://localhost:8182/employee/add_employee", values)
-      .then((response) => {
-        if (response.data.Status) {
-          navigate("/dashboard");
-        }
-      })
-      .catch((err) => console.log(err));
+    if (values.dept_id == undefined) {
+      setError("Please Slect Department");
+    } else {
+      axios
+        .post("http://localhost:8182/employee/add_employee", values)
+        .then((response) => {
+          if (response.data.Status) {
+            navigate("/dashboard");
+            setError(undefined);
+          }
+        })
+        .catch((err) => console.log(err));
+    }
   };
 
   // Cancel Add new employee
@@ -51,7 +57,7 @@ function AddEmployee() {
     <div className="addEmployeeMainDiv">
       <div className="addEmployeeDiv ">
         <form onSubmit={(e) => handleSubmit(e)}>
-          <h5 className="mb-3">Add New Employee</h5>
+          <h5 className="mb-3">ADD NEW EMPLOYEE</h5>
           <div className="mb-3">
             <input
               type="password"
@@ -119,9 +125,10 @@ function AddEmployee() {
               className="form-control rounded-1 inputForm"
             />
           </div>
+          {error ? <p style={{ color: "tomato" }}>{error}</p> : null}
           <div className="mb-3">
             <select
-              defaultValue={department[0]?.id}
+              defaultValue=""
               name="dept_id"
               onChange={(e) =>
                 setValues({ ...values, dept_id: e.target.value })
@@ -139,8 +146,8 @@ function AddEmployee() {
           </div>
           <div className="ButtonsDiv">
             <button className="mb-3 btn SubmitNCancel">Submit</button>
-            <button onClick={handleCancel} className="mb-3 btn SubmitNCancel">
-              Cacel
+            <button onClick={handleCancel} className="mb-3  btn SubmitNCancel">
+              Cancel
             </button>
           </div>
         </form>
