@@ -1,16 +1,19 @@
 import axios from "axios";
-import React from "react";
-import { Link, Outlet, useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
 import "../Component.css";
 function DashBoard() {
   axios.defaults.withCredentials = true;
   const pathname = window.location.pathname;
   const navigate = useNavigate();
+
+  ///////  Log out  user ////////////
+
   const handleLogOut = () => {
     axios
-      .get("http://localhost:8182/auth/logout")
+      .get("http://localhost:8182/api/auth/logout")
       .then((res) => {
-        if (res.data.Status) {
+        if (res.data.success) {
           localStorage.removeItem("valid");
           navigate("/");
         }
@@ -28,7 +31,8 @@ function DashBoard() {
                 to="/dashboard"
                 className="d-flex align-items-center pb-3 mb-md-1 mt-md-3 me-md-auto  text-decoration-none"
               >
-                {pathname === "/dashboard" ? (
+                {pathname === "/dashboard" ||
+                pathname === "/dashboard/addNewEmployee" ? (
                   <span className="fs-7 fw-bolder d-none d-sm-inline text-blue">
                     Manage Employee
                   </span>
@@ -55,6 +59,23 @@ function DashBoard() {
                 )}
               </Link>
             </li>
+
+            <li onClick={() => navigate("/dashboard/EmployeeDetails")}>
+              <Link
+                to="/dashboard"
+                className="d-flex align-items-center pb-3 mb-md-1 mt-md-3 me-md-auto  text-decoration-none"
+              >
+                {pathname === "/dashboard/EmployeeDetails" ? (
+                  <span className="fs-7 fw-bolder d-none d-sm-inline text-blue ">
+                    Profile
+                  </span>
+                ) : (
+                  <span className="fs-7 fw-bolder d-none d-sm-inline text-white ">
+                    Profile
+                  </span>
+                )}
+              </Link>
+            </li>
             <li onClick={() => handleLogOut()}>
               <Link
                 to="/dashboard"
@@ -76,3 +97,9 @@ function DashBoard() {
 }
 
 export default DashBoard;
+
+// <li onClick={() => navigate("/employeeDetails", { state: id })}>
+//   <span className="fs-7 fw-bolder d-none d-sm-inline text-white ">
+//     Profile
+//   </span>
+// </li>;

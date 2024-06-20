@@ -1,5 +1,5 @@
 import Department from "./Components/Dashboard/Department/Department";
-import { Routes, Route, useNavigate } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import { BrowserRouter } from "react-router-dom";
 import EmployeeData from "./Components/Dashboard/Employee/EmployeeData";
 import AddEmployee from "./Components/Dashboard/Employee/AddEmployee";
@@ -8,8 +8,6 @@ import AddDepartMent from "./Components/Dashboard/Department/AddDepartment";
 import EditDepartment from "./Components/Dashboard/Department/EditDepartment";
 import Login from "./Components/Login/Login";
 import DashBoard from "./Components/Dashboard/DashBoard";
-import ValidatingPage from "./Components/ValidatingPage";
-import EmployeeLoginForm from "./Components/Login/EmployeeLoginForm";
 import EmployeeDetails from "./Components/Dashboard/Employee/EmployeeDetails";
 import ProtectedRouter from "./Components/ProtectedRouter";
 
@@ -18,11 +16,9 @@ function App() {
     <div>
       <BrowserRouter>
         <Routes>
-          <Route path="/" element=<ValidatingPage /> />
-          <Route path="/employeelogin" element=<EmployeeLoginForm /> />
-          <Route path="/adminlogin" element=<Login /> />
+          <Route path="/" element=<Login /> />
           <Route
-            path="/employeeDetails/:id"
+            path="/employeeDetails"
             element=<ProtectedRouter>
               <EmployeeDetails />
             </ProtectedRouter>
@@ -40,6 +36,10 @@ function App() {
             <Route
               path="/dashboard/addDeparrment"
               element={<AddDepartMent />}
+            />
+            <Route
+              path="/dashboard/employeeDetails"
+              element={<EmployeeDetails />}
             />
             <Route
               path="/dashboard/editDeparrment/:id"

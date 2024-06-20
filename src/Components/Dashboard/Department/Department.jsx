@@ -42,7 +42,7 @@ function Department() {
   const getDepartmentsData = () => {
     axios
       .get(
-        `http://localhost:8182/auth/departments?page=${pageNumber}&limit=${limit}
+        `http://localhost:8182/api/admin?page=${pageNumber}&limit=${limit}
         &dept_name=${values.dept_name}`
       )
       .then((response) => {
@@ -62,26 +62,32 @@ function Department() {
     //get departmets list
     getDepartmentsData();
   }, [limit]);
+
+  //////////////Click on add Button navogation////////
+
   const handleAdd = () => {
     navigate("/dashboard/addDeparrment");
   };
 
-  ///navigate Edit Department
+  ////Click on Edit navigate Edit Department////////////
   const handleEditDepartment = (id) => {
     navigate("/dashboard/editDeparrment/" + id);
   };
 
-  /// Delete Department record
-  const handleDeleteDepartment = (id) => {
-    axios
-      .delete("http://localhost:8182/auth/delete_departments/" + id)
-      .then((res) => window.location.reload())
-      .catch((err) => {
-        console.log(err);
-      });
+  ////// Delete Department record/////////
+
+  const handleDeleteDepartment = async (id) => {
+    try {
+      const res = await axios.delete(`http://localhost:8182/api/admin/${id}`);
+      if (res.data.success) {
+        window.location.reload();
+      }
+    } catch (err) {
+      console.log(err);
+    }
   };
 
-  //////////// PAGINATION
+  //////////// PAGINATION //////////////
 
   const handleChangePage = (event, newPage) => {
     setPageNumber(newPage + 1);
@@ -92,7 +98,7 @@ function Department() {
     setPageNumber(1);
   };
 
-  ////// Based On Search
+  //////// Get deparments Based On Search ////////////
   useEffect(() => {
     getDepartmentsData();
   }, [values.dept_name]);

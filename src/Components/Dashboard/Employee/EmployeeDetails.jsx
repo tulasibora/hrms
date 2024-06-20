@@ -1,32 +1,44 @@
 import axios from "axios";
-import moment from "moment";
 import React, { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import user from "../../../../src/assets/user.png";
 
 function EmployeeDetails() {
   const [employee, setEmployee] = useState({});
   const navigate = useNavigate();
-  const { id } = useParams();
+
+  ///// get Particular Record//////////
+
   useEffect(() => {
-    // get Particular Record
-    axios
-      .get("http://localhost:8182/employee/" + id)
-      .then((resonse) => setEmployee(resonse.data.data[0]))
-      .catch((err) => console.log(err));
+    const storedData = localStorage.getItem("valid");
+
+    const fetchEmployeeData = async () => {
+      try {
+        const response = await axios.get(
+          `http://localhost:8182/api/employee/${storedData}`
+        );
+        setEmployee(response.data.data[0]);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+
+    fetchEmployeeData();
   }, []);
 
-  const handleLogout = () => {
-    axios
-      .get("http://localhost:8182/auth/logout")
-      .then((res) => {
-        if (res.data.Status) {
-          localStorage.removeItem("valid");
-          navigate("/");
-        }
-      })
-      .catch((err) => console.log(err));
+  ///////////Logout user /////////
+  const handleLogoutUser = async () => {
+    try {
+      const res = await axios.get("http://localhost:8182/api/auth/logout");
+      if (res.data.success) {
+        localStorage.removeItem("valid");
+        navigate("/");
+      }
+    } catch (err) {
+      console.log(err);
+    }
   };
+
   return (
     <div className="employeeformDiv">
       <div className="employeeDetails">
@@ -74,7 +86,10 @@ function EmployeeDetails() {
             </h5>
           </div>
         </div>
-        <button className=" btn employeeLogout" onClick={() => handleLogout()}>
+        <button
+          className=" btn employeeLogout"
+          onClick={() => handleLogoutUser()}
+        >
           Logout
         </button>
       </div>

@@ -46,18 +46,24 @@ function EmployeeData() {
   const navigate = useNavigate();
   const [resultData, setResultData] = useState({});
   const [employee, setEmployee] = useState([]);
+  const [departments, setDeparments] = useState([]);
   useEffect(() => {
     //get departmets list
     getEmpolyeeList();
   }, [pageNumber]);
   useEffect(() => {
-    //get departmets list
+    //get employee list
     getEmpolyeeList();
   }, [limit]);
   useEffect(() => {
+    if (employee <= 0) getEmpolyeeList();
     //get departmets list
-    getEmpolyeeList();
+    axios
+      .get("http://localhost:8182/api/admin")
+      .then((res) => setDeparments(res.data.data))
+      .catch((err) => console.log(err));
   }, []);
+
   /// handle Navigate to edit page
 
   const handleAddEmpolyee = () => {
@@ -68,8 +74,8 @@ function EmployeeData() {
   const getEmpolyeeList = () => {
     axios
       .get(
-        `http://localhost:8182/employee?page=${pageNumber}&limit=${limit}
-        &name=${values.name}&email=${values.email}&job_title=${values.job_title}`
+        `http://localhost:8182/api/employee?page=${pageNumber}&limit=${limit}
+        &name=${values.name}&dept=${values.email}&job_title=${values.job_title}`
       )
       .then((response) => {
         setResultData(response);
@@ -78,13 +84,13 @@ function EmployeeData() {
       .catch((err) => console.log(err));
   };
 
-  /////////////Handle Search
+  /////////////Handle Search///////
 
-  const handleSubmit = () => {
+  const handleSearchData = () => {
     // event.preventDefault();
     axios
       .get(
-        `http://localhost:8182/employee?page=${pageNumber}&limit=${limit}
+        `http://localhost:8182/api/employee?page=${pageNumber}&limit=${limit}
         &name=${values.name}&email=${values.email}&job_title=${values.job_title}`
       )
       .then((res) => {
@@ -94,22 +100,20 @@ function EmployeeData() {
       .catch((err) => console.log(err));
   };
 
-  // delete record from employee table
+  // delete record from employee table////
 
-  const handleDeleteEmployeeRecord = (id) => {
-    axios
-      .delete("http://localhost:8182/employee/delete_employee/" + id)
-      .then((res) => {
-        if (res.data.Status) {
-          window.location.reload();
-          getEmpolyeeList();
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+  const handleDeleteEmployeeRecord = async (id) => {
+    try {
+      const res = await axios.delete(
+        `http://localhost:8182/api/employee/${id}`
+      );
+      if (res.data.success) {
+        window.location.reload();
+      }
+    } catch (err) {
+      console.log(err);
+    }
   };
-
   //////////// PAGINATION
 
   const handleChangePage = (event, newPage) => {
@@ -122,9 +126,13 @@ function EmployeeData() {
   };
 
   useEffect(() => {
-    handleSubmit();
+    handleSearchData();
   }, [values.name || values.email || values.job_title]);
 
+  const departmentMap = departments?.reduce((map, dept) => {
+    map[dept.id] = dept.dept_name;
+    return map;
+  }, {});
   return (
     <div className="employeeData">
       <div className="divHedding">
@@ -180,8 +188,9 @@ function EmployeeData() {
                 <StyledTableCell>ID</StyledTableCell>
                 <StyledTableCell>Name</StyledTableCell>
                 <StyledTableCell>Email</StyledTableCell>
+                <StyledTableCell>Role</StyledTableCell>
                 <StyledTableCell>Contact Number</StyledTableCell>
-                <StyledTableCell>Department Id</StyledTableCell>
+                <StyledTableCell>Department</StyledTableCell>
                 <StyledTableCell>Job Title</StyledTableCell>
                 <StyledTableCell>Date OF Joining</StyledTableCell>
                 <StyledTableCell>Date Of Birth</StyledTableCell>
@@ -199,8 +208,11 @@ function EmployeeData() {
                     <StyledTableCell>{emp.id}</StyledTableCell>
                     <StyledTableCell>{emp.name}</StyledTableCell>
                     <StyledTableCell>{emp.email}</StyledTableCell>
+                    <StyledTableCell>{emp.role}</StyledTableCell>
                     <StyledTableCell>{emp.contact}</StyledTableCell>
-                    <StyledTableCell>{emp.dept_id}</StyledTableCell>
+                    <StyledTableCell>
+                      {departmentMap[emp.dept_id]}
+                    </StyledTableCell>
                     <StyledTableCell>{emp.job_title}</StyledTableCell>
                     <StyledTableCell>
                       {moment(emp.DOB).format("YYYY-MM-DD")}

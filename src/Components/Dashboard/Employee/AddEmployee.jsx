@@ -5,48 +5,91 @@ import { useNavigate } from "react-router-dom";
 const defaultValue = {
   password: "",
   name: "",
-  dept_id: undefined,
+  dept_id: "",
   email: "",
   job_title: "",
   contact: "",
   DOB: "",
   DOJ: "",
+  role: "",
 };
 
 function AddEmployee() {
   const navigate = useNavigate();
   const [values, setValues] = useState(defaultValue);
-  const [department, setDeparment] = useState([]);
+  const [department, setDepartment] = useState([]);
   const [error, setError] = useState("");
 
-  // get Departmets in DataBase
+  ///// to get Departmets in DataBase ////
 
   useEffect(() => {
-    axios
-      .get("http://localhost:8182/auth/departmentsDropdown")
-      .then((res) => setDeparment(res.data.data))
-      .catch((err) => console.log(err));
-  }, []);
+    const fetchDepartments = async () => {
+      try {
+        const res = await axios.get("http://localhost:8182/api/admin");
+        setDepartment(res.data.data);
+      } catch (err) {
+        console.log(err);
+      }
+    };
 
+    fetchDepartments();
+  }, []);
   //To Submit The Employee data
-  const handleSubmit = (event) => {
+
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    if (values.dept_id == undefined) {
-      setError("Please Slect Department");
-    } else {
-      axios
-        .post("http://localhost:8182/employee/add_employee", values)
-        .then((response) => {
-          if (response.data.Status) {
+    const {
+      password,
+      name,
+      dept_id,
+      email,
+      job_title,
+      contact,
+      DOB,
+      DOJ,
+      role,
+    } = values;
+
+    try {
+      const response = await axios.post(
+        "http://localhost:8182/api/employee/emailContact",
+        { email, contact }
+      );
+      if (response.data.data >= 1) {
+        setError("Email or contact number already exists.");
+      } else {
+        if (
+          password === "" ||
+          name === "" ||
+          dept_id === "" ||
+          email === "" ||
+          job_title === "" ||
+          contact === "" ||
+          DOB === "" ||
+          DOJ === "" ||
+          role === ""
+        ) {
+          setError("Please Fill All Fields");
+        } else {
+          const result = await axios.post(
+            "http://localhost:8182/api/employee/",
+            values
+          );
+
+          if (result.data.success) {
             navigate("/dashboard");
             setError(undefined);
+          } else {
+            setError("Something went wrong");
           }
-        })
-        .catch((err) => console.log(err));
+        }
+      }
+    } catch (err) {
+      setError(err.message);
     }
   };
 
-  // Cancel Add new employee
+  /////  Cancel Add new employee and navigate to table page /////
 
   const handleCancel = () => {
     navigate("/dashboard");
@@ -57,8 +100,27 @@ function AddEmployee() {
     <div className="addEmployeeMainDiv">
       <div className="addEmployeeDiv ">
         <form onSubmit={(e) => handleSubmit(e)}>
-          <h5 className="mb-3">ADD NEW EMPLOYEE</h5>
-          <div className="mb-3">
+          <h5 className="mb-2">ADD NEW EMPLOYEE</h5>
+
+          <div className="mb-2">
+            <input
+              type="text"
+              name="name"
+              placeholder="Enter Name "
+              onChange={(e) => setValues({ ...values, name: e.target.value })}
+              className="form-control rounded-1 inputForm"
+            />
+          </div>
+          <div className="mb-2">
+            <input
+              type="text"
+              name="email"
+              placeholder="Enter Mail Id"
+              onChange={(e) => setValues({ ...values, email: e.target.value })}
+              className="form-control rounded-1 inputForm"
+            />
+          </div>
+          <div className="mb-2">
             <input
               type="password"
               name="password"
@@ -69,25 +131,7 @@ function AddEmployee() {
               className="form-control rounded-1 inputForm"
             />
           </div>
-          <div className="mb-3">
-            <input
-              type="text"
-              name="name"
-              placeholder="Enter Name "
-              onChange={(e) => setValues({ ...values, name: e.target.value })}
-              className="form-control rounded-1 inputForm"
-            />
-          </div>
-          <div className="mb-3">
-            <input
-              type="text"
-              name="email"
-              placeholder="Enter Mail Id"
-              onChange={(e) => setValues({ ...values, email: e.target.value })}
-              className="form-control rounded-1 inputForm"
-            />
-          </div>
-          <div className="mb-3">
+          <div className="mb-2">
             <input
               type="text"
               name="job_title"
@@ -98,7 +142,7 @@ function AddEmployee() {
               className="form-control rounded-1 inputForm"
             />
           </div>
-          <div className="mb-3">
+          <div className="mb-2">
             <input
               type="text"
               name="contact"
@@ -109,7 +153,7 @@ function AddEmployee() {
               className="form-control rounded-1 inputForm"
             />
           </div>
-          <div className="mb-3">
+          <div className="mb-2">
             <input
               type="date"
               name="DOB"
@@ -117,7 +161,7 @@ function AddEmployee() {
               className="form-control rounded-1 inputForm"
             />
           </div>
-          <div className="mb-3">
+          <div className="mb-2">
             <input
               type="date"
               name="DOJ"
@@ -125,8 +169,7 @@ function AddEmployee() {
               className="form-control rounded-1 inputForm"
             />
           </div>
-          {error ? <p style={{ color: "tomato" }}>{error}</p> : null}
-          <div className="mb-3">
+          <div className="mb-2">
             <select
               defaultValue=""
               name="dept_id"
@@ -135,15 +178,38 @@ function AddEmployee() {
               }
               className="selectInput"
             >
+              <option defaultValue="" value="">
+                Select Department
+              </option>
               {department?.map((dept) => {
                 return (
-                  <option key={dept.id} value={dept.id}>
+                  <option key={dept.id} defaultValue="" value={dept.id}>
                     {dept.dept_name}
                   </option>
                 );
               })}
             </select>
           </div>
+          <div className="mb-2">
+            <select
+              defaultValue=""
+              name="role"
+              onChange={(e) => setValues({ ...values, role: e.target.value })}
+              className="selectInput"
+            >
+              <option defaultValue="" value="">
+                Select Role
+              </option>
+              <option defaultValue="" value="admin">
+                Admin
+              </option>
+              <option defaultValue="" value="employee">
+                Employee
+              </option>
+            </select>
+          </div>
+          {error ? <p style={{ color: "tomato" }}>{error}</p> : null}
+
           <div className="ButtonsDiv">
             <button className="mb-3 btn SubmitNCancel">Submit</button>
             <button onClick={handleCancel} className="mb-3  btn SubmitNCancel">

@@ -6,27 +6,39 @@ function EditDepartment() {
   const { id } = useParams();
   const navigate = useNavigate();
   const [dept, setDept] = useState({ name: "" });
-  console.log(dept);
+
+  //////////to fetch paricular deparment ////////
   useEffect(() => {
-    axios
-      .get("http://localhost:8182/auth/departments/" + id)
-      .then((res) => setDept({ ...dept, name: res.data.data[0].dept_name }))
-      .catch((err) => console.log(err));
-  }, []);
+    const fetchDepartment = async () => {
+      try {
+        const res = await axios.get(`http://localhost:8182/api/admin/${id}`);
+        setDept({ ...dept, name: res.data.data[0].dept_name });
+      } catch (err) {
+        console.log(err);
+      }
+    };
 
-  // submit departmet
+    fetchDepartment();
+  }, [id]);
 
-  const handleSubmit = (event) => {
+  //////// submit Edited department ///////////
+
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    axios
-      .put("http://localhost:8182/auth/editdepartment/" + id, dept)
-      .then((response) => {
-        if (response.data.Status) {
-          navigate("/dashboard/department");
-        }
-      })
-      .catch((err) => console.log(err));
+    try {
+      const response = await axios.put(
+        `http://localhost:8182/api/admin/${id}`,
+        dept
+      );
+      if (response.data.success) {
+        navigate("/dashboard/department");
+      }
+    } catch (err) {
+      console.log(err);
+    }
   };
+
+  ///////////to cancel the editing dept //////
 
   const handleCancel = () => {
     navigate("/dashboard/department");

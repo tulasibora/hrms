@@ -15,7 +15,7 @@
 }
 .employeeformDiv {
   text-align: center;
-  height: 100vh;
+  height: 88vh;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -121,11 +121,11 @@
   justify-content: space-between;
   text-align: center;
   align-items: center;
-  padding-right: 2rem;
+  padding-right: 1.2rem;
   background-color: black;
 }
 .navBarDiv h4 {
-  margin-left: 28rem;
+  margin-left: 25rem;
   font-size: 1.8rem;
 }
 /* //////////////// */
@@ -142,7 +142,7 @@
   border: 1px solid gray;
   width: 25rem;
   padding: 3;
-  height: 40vh;
+  height: 50vh;
   border-radius: 1rem;
 }
 .formDivForSearch {
@@ -242,4 +242,7 @@
   background-color: white !important;
   color: black !important;
   width: 15rem !important;
+}
+.adminGuest {
+  border: 1px solid rgb(80, 77, 77) !important;
 }

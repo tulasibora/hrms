@@ -4,57 +4,89 @@ import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 const defaultValue = {
   name: "",
-  dept_id: 1,
+  dept_id: "",
+  password: "",
   email: "",
   job_title: "",
   contact: "",
   DOB: "",
   DOJ: "",
+  role: "",
 };
 function EditEmployee() {
   const navigate = useNavigate();
   const { id } = useParams();
+  const [error, setError] = useState("");
   const [employee, setEmployee] = useState(defaultValue);
-  const [department, setDeparment] = useState([]);
-  useEffect(() => {
-    ///get departmets list
-    axios
-      .get("http://localhost:8182/auth/departmentsDropdown")
-      .then((res) => setDeparment(res.data.data))
-      .catch((err) => console.log(err));
+  const [department, setDepartment] = useState([]);
 
-    // get Particular Record
-    axios
-      .get("http://localhost:8182/employee/" + id)
-      .then((resonse) =>
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        // Get departments list
+        const departmentRes = await axios.get(
+          "http://localhost:8182/api/admin"
+        );
+        setDepartment(departmentRes.data.data);
+
+        // Get particular record
+        const employeeRes = await axios.get(
+          `http://localhost:8182/api/employee/${id}`
+        );
+        const employeeData = employeeRes.data.data[0];
         setEmployee({
           ...employee,
-          name: resonse.data.data[0].name,
-          dept_id: resonse.data.data[0].dept_id,
-          email: resonse.data.data[0].email,
-          job_title: resonse.data.data[0].job_title,
-          contact: resonse.data.data[0].contact,
-          DOB: moment(resonse.data.data[0].DOB).format("YYYY-MM-DD"),
-          DOJ: moment(resonse.data.data[0].DOJ).format("YYYY-MM-DD"),
-        })
-      )
-      .catch((err) => console.log(err));
-  }, []);
+          name: employeeData.name,
+          role: employeeData.role,
+          dept_id: employeeData.dept_id,
+          email: employeeData.email,
+          job_title: employeeData.job_title,
+          contact: employeeData.contact,
+          DOB: moment(employeeData.DOB).format("YYYY-MM-DD"),
+          DOJ: moment(employeeData.DOJ).format("YYYY-MM-DD"),
+        });
+      } catch (err) {
+        console.log(err);
+      }
+    };
 
-  console.log(employee);
-  /// submit the Edited data
+    fetchData();
+  }, [id]);
 
-  const handleSubmitEditedData = (event) => {
+  /////////////// submit the Edited data   ///////////////
+
+  const handleSubmitEditedData = async (event) => {
     event.preventDefault();
-    axios
-      .put("http://localhost:8182/employee/edit_employee/" + id, employee)
-      .then((res) => {
-        if (res.data.Status) {
+    const { name, dept_id, email, job_title, contact, DOB, DOJ, role } =
+      employee;
+
+    if (
+      name === "" ||
+      dept_id === "" ||
+      email === "" ||
+      job_title === "" ||
+      contact === "" ||
+      DOB === "" ||
+      DOJ === "" ||
+      role === ""
+    ) {
+      setError("Please Fill All Fields");
+    } else {
+      try {
+        const res = await axios.put(
+          `http://localhost:8182/api/employee/${id}`,
+          employee
+        );
+        if (res.data.success) {
           navigate("/dashboard");
         }
-      })
-      .catch((err) => console.log(err));
+      } catch (err) {
+        console.log(err);
+      }
+    }
   };
+
+  /////Cancel to add new Employee /////////
   const handleCancel = () => {
     navigate("/dashboard");
   };
@@ -152,7 +184,25 @@ function EditEmployee() {
               })}
             </select>
           </div>
-
+          <div className="mb-2">
+            <select
+              disabled={true}
+              defaultValue=""
+              name="role"
+              onChange={(e) =>
+                setEmployee({ ...employee, role: e.target.value })
+              }
+              className="selectInput"
+            >
+              <option defaultValue="" value="admin">
+                Admin
+              </option>
+              <option defaultValue="" value="employee">
+                Employee
+              </option>
+            </select>
+          </div>
+          {error ? <p style={{ color: "tomato" }}>{error}</p> : null}
           <div className="ButtonsDiv">
             <button className="mb-3 btn SubmitNCancel">Submit</button>
             <button onClick={handleCancel} className="mb-3 btn SubmitNCancel">
